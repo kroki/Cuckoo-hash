@@ -1,0 +1,7 @@
+## This file is included in Makefile.am.    -*- Makefile -*-
+##
+
+$(top_srcdir)/version.m4: .force
+	cd $(top_srcdir) && $(SHELL) ./version.sh
+
+.PHONY: .force

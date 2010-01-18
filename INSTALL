@@ -1,0 +1,24 @@
+Installation Instructions
+*************************
+
+You can find the standard GNU INSTALL file with general configure
+instructions elsewhere.  Here's a short version.
+
+If you checked out this project from git repository, then first run
+
+  ./bootstrap.sh
+
+to initialize autotools framework.
+
+To build the project, run
+
+  ./configure
+  make
+  make check
+
+To install it, run
+
+  make install
+
+If you are doing 64-bit build, and your system keeps 64-bit libraries
+in /lib64, pass --libdir='${exec_prefix}/lib64' to ./configure above.
