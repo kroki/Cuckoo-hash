@@ -27,6 +27,8 @@ AC_PROG_CC_C_O
 AC_PROG_CXX
 AC_PROG_CXX_C_O
 
+AC_CHECK_FUNCS([mallinfo])
+
 AC_LANG_PUSH([C++])
 
 AC_MSG_CHECKING([whether $CXX runtime has std::unordered_map])

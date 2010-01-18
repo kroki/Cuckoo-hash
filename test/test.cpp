@@ -30,6 +30,12 @@
 #include <sstream>
 #include <cstdlib>
 #include <ctime>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+#ifdef HAVE_MALLINFO
+#include <malloc.h>
+#endif
 #include "test.h"
 
 
@@ -273,6 +279,10 @@ main(int argc, char *argv[])
 
   cont_type *cont = create<cont_type>();
 
+#ifdef HAVE_MALLINFO
+  struct mallinfo before = mallinfo();
+#endif
+
   size_t sum = 0;
   start = clock();
   for (int i = 0; i < count; ++i)
@@ -281,6 +291,14 @@ main(int argc, char *argv[])
       sum += data[i].data;
     }
   stop = clock();
+
+#ifdef HAVE_MALLINFO
+  struct mallinfo after = mallinfo();
+  std::cout << "used memory: "
+            << (after.hblkhd + after.arena) - (before.hblkhd + before.arena)
+            << std::endl;
+#endif
+
   std::cout << "load factor: " << load_factor(cont) << std::endl;
   std::cout << "insert: "
             << static_cast<double>(stop - start) / CLOCKS_PER_SEC << " sec"
