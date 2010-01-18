@@ -1,0 +1,9 @@
+Cuckoo hash
+===========
+
+Released under LGPLv3.
+
+This library contains the C language implementation of the cuckoo
+hash, a hash data structure with O(1) worst case lookup time (most
+hashes have only amortized O(1)), good load factor (about 95%), and
+excellent overall performance.

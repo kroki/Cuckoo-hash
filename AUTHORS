@@ -1,1 +1,3 @@
 Tomash Brechko <tomash.brechko@gmail.com>
+
+Contains hash function hashlittle2() by Bob Jenkins.
