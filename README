@@ -7,3 +7,6 @@ This library contains the C language implementation of the cuckoo
 hash, a hash data structure with O(1) worst case lookup time (most
 hashes have only amortized O(1)), good load factor (about 95%), and
 excellent overall performance (benchmark tests are included).
+
+http://krokisplace.blogspot.com/2010/01/cuckoo-hashing-implementation.html
+has a nice plots produced with the included script.
