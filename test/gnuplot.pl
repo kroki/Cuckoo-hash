@@ -112,7 +112,7 @@ print $out <<EOF;
 
 @{[ join "\n", map { "aspect$_ = '$aspects[$_]'" } 0 .. $#aspects ]}
 
-file = '\$0'
+file = \$0
 index = \$1
 
 sindex = "" . index
