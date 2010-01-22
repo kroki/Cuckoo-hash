@@ -10,7 +10,8 @@ TESTS =						\
 
 EXTRA_DIST =					\
 	test.h					\
-	cuckoo_hash.sh
+	cuckoo_hash.sh				\
+	gnuplot.pl
 
 
 check_PROGRAMS =				\
