@@ -160,7 +160,7 @@ cuckoo_hash_next(const struct cuckoo_hash *hash,
   cuckoo_hash_each(it, hash):
 
   Iterate over all elements in the hash.  it is an iterator variable
-  of type const struct cuckoo_hash_item *.  To be used as
+  of type struct cuckoo_hash_item *.  To be used as
 
     struct cuckoo_hash_item *it;
     ...
