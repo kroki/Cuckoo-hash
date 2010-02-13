@@ -49,7 +49,7 @@ I<FILE> all the data accumulated thus far.
 
 use Pod::Usage;
 
-pod2usage({ -verbose => 2}) if @ARGV == 1 && $ARGV[0] eq "--help";
+pod2usage({ -verbose => 2 }) if @ARGV == 1 && $ARGV[0] eq "--help";
 pod2usage("Not enough arguments\n") if @ARGV < 6;
 my @nonnum = grep { /(\D)/ } @ARGV[1..4];
 pod2usage("Not a number: $nonnum[0]\n") if @nonnum;
