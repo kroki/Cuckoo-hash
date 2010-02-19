@@ -14,7 +14,9 @@
   You should have received a copy of the GNU Lesser General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "cuckoo_hash.h"
+#include "xprobes.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,9 +36,17 @@ compute_hash(const void *key, size_t key_len,
   *h2 = 0x6d7839d0;
   hashlittle2(key, key_len, h1, h2);
   if (*h1 != *h2)
-    return;
+    {
+      return;
+    }
   else
-    *h2 = ~*h2;
+    {
+      *h2 = ~*h2;
+
+      XPROBES_SITE(cuckoo_hash_compute_hash_equal,
+                   (const void *, size_t, uint32_t),
+                   (key, key_len, *h1));
+    }
 }
 
 
@@ -61,6 +71,10 @@ cuckoo_hash_init(struct cuckoo_hash *hash, unsigned char power)
   if (! hash->table)
     return false;
 
+  XPROBES_SITE(cuckoo_hash_init,
+               (const struct cuckoo_hash *),
+               (hash));
+
   return true;
 }
 
@@ -68,6 +82,10 @@ cuckoo_hash_init(struct cuckoo_hash *hash, unsigned char power)
 void
 cuckoo_hash_destroy(const struct cuckoo_hash *hash)
 {
+  XPROBES_SITE(cuckoo_hash_destroy,
+               (const struct cuckoo_hash *),
+               (hash));
+
   free(hash->table);
 }
 
@@ -96,7 +114,13 @@ lookup(const struct cuckoo_hash *hash, const void *key, size_t key_len,
       if (elem->hash2 == h2 && elem->hash1 == h1
           && elem->hash_item.key_len == key_len
           && memcmp(elem->hash_item.key, key, key_len) == 0)
-        return &elem->hash_item;
+        {
+          XPROBES_SITE(cuckoo_hash_lookup_hash1,
+                       (const struct cuckoo_hash *, int),
+                       (hash, hash->bin_size - (end - elem)));
+
+          return &elem->hash_item;
+        }
 
       ++elem;
     }
@@ -108,10 +132,20 @@ lookup(const struct cuckoo_hash *hash, const void *key, size_t key_len,
       if (elem->hash2 == h1 && elem->hash1 == h2
           && elem->hash_item.key_len == key_len
           && memcmp(elem->hash_item.key, key, key_len) == 0)
-        return &elem->hash_item;
+        {
+          XPROBES_SITE(cuckoo_hash_lookup_hash2,
+                       (const struct cuckoo_hash *, int),
+                       (hash, 2 * hash->bin_size - (end - elem)));
+
+          return &elem->hash_item;
+        }
 
       ++elem;
     }
+
+  XPROBES_SITE(cuckoo_hash_lookup_not_found,
+               (const struct cuckoo_hash *, int),
+               (hash, 2 * hash->bin_size));
 
   return NULL;
 }
@@ -139,6 +173,10 @@ cuckoo_hash_remove(struct cuckoo_hash *hash,
          ((char *) hash_item - offsetof(struct _cuckoo_hash_elem, hash_item)));
       elem->hash1 = elem->hash2 = 0;
       --hash->count;
+
+      XPROBES_SITE(cuckoo_hash_remove,
+                   (const struct cuckoo_hash *),
+                   (hash));
     }
 }
 
@@ -215,11 +253,21 @@ undo_insert(struct cuckoo_hash *hash, struct _cuckoo_hash_elem *item,
         {
           assert(depth >= max_depth);
 
+          XPROBES_SITE(cuckoo_hash_insert_undo_inserted,
+                       (const struct cuckoo_hash *,
+                        int, size_t, size_t),
+                       (hash, phase, depth, max_depth));
+
           return true;
         }
 
       *item = victim;
     }
+
+  XPROBES_SITE(cuckoo_hash_insert_undo,
+               (const struct cuckoo_hash *,
+                int, size_t),
+               (hash, phase, max_depth));
 
   return false;
 }
@@ -249,6 +297,11 @@ insert(struct cuckoo_hash *hash, struct _cuckoo_hash_elem *item)
               if (elem->hash1 == elem->hash2 || (elem->hash1 & mask) != h1m)
                 {
                   *elem = *item;
+
+                  XPROBES_SITE(cuckoo_hash_insert_done,
+                               (const struct cuckoo_hash *,
+                                int, size_t, size_t),
+                               (hash, phase, depth, max_depth));
 
                   return true;
                 }
@@ -285,6 +338,11 @@ insert(struct cuckoo_hash *hash, struct _cuckoo_hash_elem *item)
 
       *last = *item;
 
+      XPROBES_SITE(cuckoo_hash_insert_grow_bin,
+                   (const struct cuckoo_hash *,
+                    int, size_t),
+                   (hash, phase, max_depth));
+
       return true;
     }
   else
@@ -303,7 +361,13 @@ cuckoo_hash_insert(struct cuckoo_hash *hash,
 
   struct cuckoo_hash_item *item = lookup(hash, key, key_len, h1, h2);
   if (item)
-    return item;
+    {
+      XPROBES_SITE(cuckoo_hash_insert_exists,
+                   (const struct cuckoo_hash *),
+                   (hash));
+
+      return item;
+    }
 
   struct _cuckoo_hash_elem elem = {
     .hash_item = { .key = key, .key_len = key_len, .value = value },

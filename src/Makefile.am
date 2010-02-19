@@ -14,7 +14,8 @@ lib_LTLIBRARIES =				\
 
 libcuckoo_hash_la_SOURCES =			\
 	cuckoo_hash.c				\
-	lookup3.c
+	lookup3.c				\
+	xprobes.h
 
 
 ## Here's an excerpt from 'info libtool versioning updating' on when
