@@ -69,3 +69,22 @@ endif  # HAVE_UNORDERED_MAP_CACHE
 
 
 endif  # HAVE_UNORDERED_MAP
+
+
+if WITH_XPROBES
+
+
+check_LTLIBRARIES =				\
+	probe_lookup.la				\
+	probe_insert.la
+
+
+probe_lookup_la_LDFLAGS =			\
+	-module -shared -rpath $(PWD)
+
+
+probe_insert_la_LDFLAGS =			\
+	-module -shared -rpath $(PWD)
+
+
+endif # WITH_XPROBES
