@@ -20,5 +20,12 @@ To install it, run
 
   make install
 
+
+Additional options to configure:
+
+  --with-xprobes[=DIR]    use XProbes framework [default=no]. You can provide
+                          DIR prefix to where XProbes is installed.
+
+
 If you are doing 64-bit build, and your system keeps 64-bit libraries
 in /lib64, pass --libdir='${exec_prefix}/lib64' to ./configure above.
