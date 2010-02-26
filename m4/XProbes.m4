@@ -19,7 +19,7 @@ AC_DEFUN([XPROBES],
         [CPPFLAGS="$CPPFLAGS -I$with_xprobes/include"
          LDFLAGS="$LDFLAGS -L$with_xprobes/lib64 -L$with_xprobes/lib"])
       AC_TRY_LINK([#include <xprobes/site.h>],
-        [XPROBES_SITE(xprobes, (), ());],
+        [XPROBES_SITE(xprobes, site, (void), ());],
         [],
         [AS_IF([test x"$with_xprobes" != x"yes"],
           [xprobes_dir=$with_xprobes],

@@ -43,7 +43,7 @@ compute_hash(const void *key, size_t key_len,
     {
       *h2 = ~*h2;
 
-      XPROBES_SITE(cuckoo_hash_compute_hash_equal,
+      XPROBES_SITE(cuckoo_hash, compute_hash_equal,
                    (const void *, size_t, uint32_t),
                    (key, key_len, *h1));
     }
@@ -71,7 +71,7 @@ cuckoo_hash_init(struct cuckoo_hash *hash, unsigned char power)
   if (! hash->table)
     return false;
 
-  XPROBES_SITE(cuckoo_hash_init,
+  XPROBES_SITE(cuckoo_hash, init,
                (const struct cuckoo_hash *),
                (hash));
 
@@ -82,7 +82,7 @@ cuckoo_hash_init(struct cuckoo_hash *hash, unsigned char power)
 void
 cuckoo_hash_destroy(const struct cuckoo_hash *hash)
 {
-  XPROBES_SITE(cuckoo_hash_destroy,
+  XPROBES_SITE(cuckoo_hash, destroy,
                (const struct cuckoo_hash *),
                (hash));
 
@@ -115,7 +115,7 @@ lookup(const struct cuckoo_hash *hash, const void *key, size_t key_len,
           && elem->hash_item.key_len == key_len
           && memcmp(elem->hash_item.key, key, key_len) == 0)
         {
-          XPROBES_SITE(cuckoo_hash_lookup_hash1,
+          XPROBES_SITE(cuckoo_hash, lookup_hash1,
                        (const struct cuckoo_hash *, int),
                        (hash, hash->bin_size - (end - elem)));
 
@@ -133,7 +133,7 @@ lookup(const struct cuckoo_hash *hash, const void *key, size_t key_len,
           && elem->hash_item.key_len == key_len
           && memcmp(elem->hash_item.key, key, key_len) == 0)
         {
-          XPROBES_SITE(cuckoo_hash_lookup_hash2,
+          XPROBES_SITE(cuckoo_hash, lookup_hash2,
                        (const struct cuckoo_hash *, int),
                        (hash, 2 * hash->bin_size - (end - elem)));
 
@@ -143,7 +143,7 @@ lookup(const struct cuckoo_hash *hash, const void *key, size_t key_len,
       ++elem;
     }
 
-  XPROBES_SITE(cuckoo_hash_lookup_not_found,
+  XPROBES_SITE(cuckoo_hash, lookup_not_found,
                (const struct cuckoo_hash *, int),
                (hash, 2 * hash->bin_size));
 
@@ -174,7 +174,7 @@ cuckoo_hash_remove(struct cuckoo_hash *hash,
       elem->hash1 = elem->hash2 = 0;
       --hash->count;
 
-      XPROBES_SITE(cuckoo_hash_remove,
+      XPROBES_SITE(cuckoo_hash, remove,
                    (const struct cuckoo_hash *),
                    (hash));
     }
@@ -253,7 +253,7 @@ undo_insert(struct cuckoo_hash *hash, struct _cuckoo_hash_elem *item,
         {
           assert(depth >= max_depth);
 
-          XPROBES_SITE(cuckoo_hash_insert_undo_inserted,
+          XPROBES_SITE(cuckoo_hash, insert_undo_inserted,
                        (const struct cuckoo_hash *,
                         int, size_t, size_t),
                        (hash, phase, depth, max_depth));
@@ -264,7 +264,7 @@ undo_insert(struct cuckoo_hash *hash, struct _cuckoo_hash_elem *item,
       *item = victim;
     }
 
-  XPROBES_SITE(cuckoo_hash_insert_undo,
+  XPROBES_SITE(cuckoo_hash, insert_undo,
                (const struct cuckoo_hash *,
                 int, size_t),
                (hash, phase, max_depth));
@@ -298,7 +298,7 @@ insert(struct cuckoo_hash *hash, struct _cuckoo_hash_elem *item)
                 {
                   *elem = *item;
 
-                  XPROBES_SITE(cuckoo_hash_insert_done,
+                  XPROBES_SITE(cuckoo_hash, insert_done,
                                (const struct cuckoo_hash *,
                                 int, size_t, size_t),
                                (hash, phase, depth, max_depth));
@@ -338,7 +338,7 @@ insert(struct cuckoo_hash *hash, struct _cuckoo_hash_elem *item)
 
       *last = *item;
 
-      XPROBES_SITE(cuckoo_hash_insert_grow_bin,
+      XPROBES_SITE(cuckoo_hash, insert_grow_bin,
                    (const struct cuckoo_hash *,
                     int, size_t),
                    (hash, phase, max_depth));
@@ -362,7 +362,7 @@ cuckoo_hash_insert(struct cuckoo_hash *hash,
   struct cuckoo_hash_item *item = lookup(hash, key, key_len, h1, h2);
   if (item)
     {
-      XPROBES_SITE(cuckoo_hash_insert_exists,
+      XPROBES_SITE(cuckoo_hash, insert_exists,
                    (const struct cuckoo_hash *),
                    (hash));
 
