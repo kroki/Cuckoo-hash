@@ -126,16 +126,15 @@ cuckoo_hash_lookup(const struct cuckoo_hash *hash,
 
     cuckoo_hash_remove(hash, cuckoo_hash_lookup(hash, key, key_len));
 
-  hash_item passed to cuckoo_hash_remove() becomes invalid after the
-  call.  If you allocated the key and/or value dynamically, you may
-  conveniently free them _before_ calling cuckoo_hash_remove(), they
-  won't be referenced inside:
+  hash_item passed to cuckoo_hash_remove() stays valid until the next
+  call to cuckoo_hash_insert() or cuckoo_hash_destroy(), so if you
+  allocated the key and/or value dynamically, you may free them either
+  before or after the call (they won't be referenced inside):
 
     struct cuckoo_hash_item *item = cuckoo_hash_lookup(hash, k, l);
-    ...
     free((void *) item->key);
-    free(item->value);
     cuckoo_hash_remove(hash, item);
+    free(item->value);
 
   (that (void *) cast above is to cast away the const qualifier).
 */
