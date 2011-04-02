@@ -33,18 +33,12 @@
 
 #include <sys/sdt.h>
 
-#define XPROBES_ARGC_SFX0(z, n, ...)  n
-#define XPROBES_ARGC_SFX1(z, n, ...)  XPROBES_ARGC_SFX0(z, ##__VA_ARGS__, z)
-#define XPROBES_ARGC_SFX2(z, n, ...)  XPROBES_ARGC_SFX1(z, ##__VA_ARGS__, 1)
-#define XPROBES_ARGC_SFX3(z, n, ...)  XPROBES_ARGC_SFX2(z, ##__VA_ARGS__, 2)
-#define XPROBES_ARGC_SFX4(z, n, ...)  XPROBES_ARGC_SFX3(z, ##__VA_ARGS__, 3)
-#define XPROBES_ARGC_SFX5(z, n, ...)  XPROBES_ARGC_SFX4(z, ##__VA_ARGS__, 4)
-#define XPROBES_ARGC_SFX6(z, n, ...)  XPROBES_ARGC_SFX5(z, ##__VA_ARGS__, 5)
-#define XPROBES_ARGC_SFX7(z, n, ...)  XPROBES_ARGC_SFX6(z, ##__VA_ARGS__, 6)
-#define XPROBES_ARGC_SFX8(z, n, ...)  XPROBES_ARGC_SFX7(z, ##__VA_ARGS__, 7)
-#define XPROBES_ARGC_SFX9(z, n, ...)  XPROBES_ARGC_SFX8(z, ##__VA_ARGS__, 8)
-#define XPROBES_ARGC_SFX10(z, n, ...)  XPROBES_ARGC_SFX9(z, ##__VA_ARGS__, 9)
-#define XPROBES_ARGC_SFX(...)  XPROBES_ARGC_SFX10(/*empty*/, ##__VA_ARGS__, 10)
+#define XPROBES_ARGC_SFX_SHIFT(ignore,                                  \
+                               a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, \
+                               n, ...)  n
+#define XPROBES_ARGC_SFX(...)                                   \
+  XPROBES_ARGC_SFX_SHIFT(/* ignore */, ##__VA_ARGS__,           \
+                         10, 9, 8, 7, 6, 5, 4, 3, 2, 1, /*0*/)
 
 #define XPROBES_CONCAT(a, b)  a##b
 #define XPROBES_EVAL_CONCAT(a, b)  XPROBES_CONCAT(a, b)
