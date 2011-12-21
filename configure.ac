@@ -7,8 +7,8 @@ AC_PREREQ(2.59)
 m4_include([version.m4])
 AC_INIT([Cuckoo hash], [VERSION_STRING], [tomash.brechko@gmail.com],
         [cuckoo-hash])
-AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_AUX_DIR([config])
+AC_CONFIG_HEADERS([src/autoconfig.h])
+AC_CONFIG_AUX_DIR([auto])
 AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([1.9.2 -Wall no-define subdir-objects

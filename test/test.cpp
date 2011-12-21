@@ -31,7 +31,7 @@
 #include <cstdlib>
 #include <ctime>
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "autoconfig.h"
 #endif
 #ifdef HAVE_MALLINFO
 #include <malloc.h>

@@ -1,9 +1,8 @@
-*~
 Makefile.in
 /m4/
 /aclocal.m4
 /autom4te.cache/
-/config.h.in
-/config/
+/src/autoconfig.h.in
+/auto/
 /configure
 /version.m4
