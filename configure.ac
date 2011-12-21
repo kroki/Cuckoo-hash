@@ -6,7 +6,7 @@ dnl
 AC_PREREQ(2.59)
 m4_include([version.m4])
 AC_INIT([Cuckoo hash], [VERSION_STRING], [tomash.brechko@gmail.com],
-        [cuckoo_hash])
+        [cuckoo-hash])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_MACRO_DIR([m4])
