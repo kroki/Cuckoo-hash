@@ -2,6 +2,13 @@ Cuckoo hash
 ===========
 
 
+0.2  2011-12-21
+
+       Add XProbes instrumentation.
+
+       Add spec file for RPM generation.
+
+
 0.1  2010-01-22
 
        First release.  I will use consecutive version numbers starting
