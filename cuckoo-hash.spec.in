@@ -37,6 +37,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 %package devel
 Summary:        Cuckoo hashing C library headers
+Requires:       %{name} == %{version}
 
 %description devel
 C library implementing cuckoo hashing algorithm.
