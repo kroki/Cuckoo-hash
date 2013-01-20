@@ -18,6 +18,8 @@ AC_PREFIX_DEFAULT([/usr/local])
 
 AC_CONFIG_SRCDIR([src/Makefile.am])
 
+AM_PROG_AR
+
 LT_INIT
 
 AC_PROG_MAKE_SET
