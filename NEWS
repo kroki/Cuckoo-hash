@@ -2,6 +2,11 @@ Cuckoo hash
 ===========
 
 
+0.3  2013-02-06
+
+       No functional changes, just update build environment.
+
+
 0.2  2011-12-21
 
        Add XProbes instrumentation.
